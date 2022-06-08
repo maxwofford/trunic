@@ -1,0 +1,223 @@
+Hello!
+
+<img src="runes.png">
+<p>
+  <span>33^6</span> "the"
+</p>
+<p>
+  <span>32^8</span> "to?"
+</p>
+<p>
+  <span>34^2_26_34</span> "fox"
+</p>
+<p>
+  <span>34^10_25</span> "sword"
+</p>
+<p>
+  <span>33^6 27^17_42_25^3_20 22^1^32</span> "the golden path"
+</p>
+
+<p>
+  <span>6</span> "your"
+</p>
+
+<p>
+  <span>33^6 39^8^20^3 34^7^26^9 23^7^27^3^26^35 </span>
+</p>
+
+<script>
+  function translate(input) {
+    if (input == 1)
+      return 'a'
+    if (input == 3)
+      return 'e'
+    if (input == 6)
+      return 'ee'
+    if (input == 10)
+      return 'or'
+    if (input == 17)
+      return 'o'
+    if (input == 20)
+      return 'n'
+    if (input == 22)
+      return 'p'
+    if (input == 27)
+      return 'g'
+    if (input == 25)
+      return 'd'
+    if (input == 32)
+      return 'th'
+    if (input == 33)
+      return 'th'
+    if (input == 34)
+      return 's'
+    if (input == 42)
+      return 'l'
+    return "*"
+  }
+  document.querySelectorAll('span').forEach(span => {
+    let glyphs = []
+    words = span.innerText.split(' ')
+    span.innerHTML = words.map(word => {
+      pairs = word.split('_')
+      let converted_pairs = pairs.map(pair => {
+        letters = pair.split('^')
+        console.log({letters})
+        glyphs.push(draw(letters))
+        return letters.map(letter => {
+          return translate(letter)
+        }).join('')
+      }).join('')
+      glyphs.push(document.createTextNode(" "))
+      return converted_pairs
+    }).join(' ')
+    glyphs.forEach(glyph => span.appendChild(glyph))
+  })
+  function draw(characters=[]) {
+    const reverse = parseInt(characters[0]) > parseInt(characters[1])
+    console.log({characters, reverse})
+    const characterMapping = {
+      // outer characters
+      1: ['outer-top-left', 'outer-top-right', 'outer-left'],
+      2: ['outer-left', 'outer-top-left'],
+      3: ['outer-bottom-left', 'outer-bottom-right'],
+      4: ['outer-left', 'outer-bottom-left', 'outer-bottom-right'],
+      5: ['outer-left', 'outer-bottom-left'],
+      6: ['outer-top-left', 'outer-top-right'],
+      7: ['outer-top-left', 'outer-left', 'outer-bottom-left', 'outer-bottom-right'],
+      8: ['outer-top-right', 'outer-top-left', 'outer-left', 'outer-bottom-left'],
+      9: ['outer-top-right', 'outer-left', 'outer-bottom-left', 'outer-bottom-right'],
+      10: ['outer-bottom-right', 'outer-left', 'outer-top-left', 'outer-top-right'],
+      11: ['outer-top-left', 'outer-top-right', 'outer-bottom-left', 'outer-bottom-right'],
+      12: ['outer-bottom-right', 'outer-left', 'outer-top-left'],
+      13: ['outer-top-left'],
+      14: ['outer-top-right'],
+      15: ['outer-bottom-left'],
+      16: ['outer-bottom-right'],
+      17: ['outer-top-right', 'outer-top-left', 'outer-left', 'outer-bottom-left', 'outer-bottom-right'],
+      18: ['outer-left', 'outer-bottom-right'],
+      // inner characters
+      19: ['inner-bottom-left', 'inner-bottom-right'],
+      20: ['inner-bottom-left', 'inner-bottom-right', 'inner-top-left'],
+      21: ['inner-bottom-left', 'inner-bottom-right', 'inner-top-left', 'inner-top-right', 'inner-bottom', 'inner-top'],
+      22: ['inner-bottom', 'inner-top-right'],
+      23: ['inner-top', 'inner-bottom-right'],
+      24: ['inner-bottom', 'inner-top-left', 'inner-top-right'],
+      25: ['inner-top', 'inner-bottom-left', 'inner-bottom-right'],
+      26: ['inner-top', 'inner-top-right', 'inner-bottom-right'],
+      27: ['inner-bottom', 'inner-top-right', 'inner-bottom-right'],
+      28: ['inner-top', 'inner-bottom-left'],
+      29: ['inner-bottom', 'inner-top-left'],
+      30: ['inner-bottom', 'inner-bottom-left', 'inner-top-right'],
+      31: ['inner-top', 'inner-top-left', 'inner-bottom-right'],
+      32: ['inner-top', 'inner-bottom', 'inner-top-right', 'inner-top-left'],
+      33: ['inner-top', 'inner-bottom-right', 'inner-bottom-left', 'inner-bottom'],
+      34: ['inner-top', 'inner-bottom', 'inner-bottom-left', 'inner-top-right'],
+      35: ['inner-top', 'inner-bottom', 'inner-top-left', 'inner-bottom-right'],
+      36: ['inner-bottom', 'inner-top-left', 'inner-top-right', 'inner-bottom-left', 'inner-bottom-right'],
+      37: ['inner-top', 'inner-top-left', 'inner-top-right', 'inner-bottom-left', 'inner-bottom-right'],
+      38: ['inner-bottom', 'inner-top', 'inner-bottom-right'],
+      39: ['inner-bottom', 'inner-top', 'inner-top-right'],
+      40: ['inner-bottom', 'inner-top', 'inner-top-left'],
+      41: ['inner-top-left', 'inner-top-right'],
+      42: ['inner-top', 'inner-bottom']
+
+    }
+    const canvas = document.createElement('canvas')
+    canvas.style = 'transform: rotate(90deg)'
+    canvas.height = 44
+    canvas.width = 44
+    const ctx = canvas.getContext('2d')
+    const a = 2 * Math.PI / 6
+    const x = canvas.width / 2
+    const y = canvas.height / 2
+    const r = x
+    document.body.appendChild(canvas)
+    function drawOuterLine(i) {
+      // draw an outer hexagon line, starting at the bottom left outer line for
+      // i=0, and going clockwise
+      ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i))
+    }
+    function drawCenter() {
+      ctx.lineTo(x, y)
+    }
+    function drawInnerLine(i) {
+      ctx.lineTo(x, y + r * Math.sin(-i * a))
+    }
+    ctx.strokeStyle = "grey"
+    ctx.beginPath()
+    for (var i = 0; i < 6; i++) {
+      drawOuterLine(i)
+    }
+    ctx.closePath()
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.lineTo(x, 0)
+    ctx.lineTo(x, 2 * y)
+    ctx.closePath()
+    ctx.stroke()
+    console.log({characters})
+    const lines = [].concat.apply([], characters.map(c => characterMapping[c]))
+    lines.forEach(line => {
+      ctx.strokeStyle = "black"
+      ctx.beginPath()
+      switch (line) {
+        case 'outer-bottom-left':
+          drawOuterLine(0)
+          drawOuterLine(1)
+          break
+        case 'outer-left':
+          drawOuterLine(1)
+          drawOuterLine(2)
+          break
+        case 'outer-top-left':
+          drawOuterLine(2)
+          drawOuterLine(3)
+          break
+        case 'outer-top-right':
+          drawOuterLine(3)
+          drawOuterLine(4)
+          break
+        case 'outer-right':
+          drawOuterLine(4)
+          drawOuterLine(5)
+          break
+        case 'outer-bottom-right':
+          drawOuterLine(5)
+          drawOuterLine(6)
+          break
+        case 'inner-bottom':
+          drawCenter()
+          drawOuterLine(0)
+          break
+        case 'inner-bottom-left':
+          drawCenter()
+          drawOuterLine(1)
+          break
+        case 'inner-top-left':
+          drawCenter()
+          drawOuterLine(2)
+          break
+        case 'inner-top':
+          drawCenter()
+          drawOuterLine(3)
+          break
+        case 'inner-top-right':
+          drawCenter()
+          drawOuterLine(4)
+          break
+        case 'inner-bottom-right':
+          drawCenter()
+          drawOuterLine(5)
+          break
+        default:
+          console.log("don't know how to draw", line)
+          break;
+      }
+      ctx.closePath()
+      ctx.stroke()
+    })
+    return canvas
+  }
+  draw([32])
+</script>
