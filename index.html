@@ -53,6 +53,14 @@ Hello!
   <span>38^8_35 3^35 33^3_39</span> something about savefiles "who's is there?"
 </p>
 
+<p>
+  <span>22_39^3_34</span>"press?" seen on p. 13 over a button
+</p>
+
+<p>
+  <span>39^17_42 (roll) | 39^6_20 (run) | 22_39^3_34 24^8 39^17_42 ! 31^18_7 31^18_7 3^19_22^10_24^3_20_24 30^10 34^9_31^3_21</span> other p. 13 stuff
+</p>
+
 <script>
   function translate(input) {
     if (input == 1)
@@ -64,7 +72,7 @@ Hello!
     if (input == 4)
       return 'e'
     if (input == 6)
-      return 'uh' // maybe 'ee'
+      return 'uh' // maybe 'ee', found in 'the' and the word 'a'
     if (input == 7)
       return 'ee'
     if (input == 8)
@@ -80,7 +88,9 @@ Hello!
     if (input == 17)
       return 'o'
     if (input == 18)
-      return 'air'
+      return 'air' // as in 'heir' or 'air' or 'where'
+    if (input == 19)
+      return 'm' // the 'm' in important
     if (input == 20)
       return 'n'
     if (input == 22)
@@ -97,6 +107,8 @@ Hello!
       return 'k'
     if (input == 30)
       return 'f'
+    if (input == 31)
+      return 'v'
     if (input == 32)
       return 'th'
     if (input == 33)
@@ -113,7 +125,9 @@ Hello!
       return 'w'
     if (input == 42)
       return 'l'
-    return "*"
+    if (/^\d+$/.test(input))
+      return "*"
+    return input
   }
   document.querySelectorAll('span').forEach(span => {
     let glyphs = []
